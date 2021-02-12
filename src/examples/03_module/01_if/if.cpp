@@ -18,3 +18,18 @@ bool is_even(int num)
 //hours over 40, false otherwise
 
 
+
+bool is_in_range_1_to_10(int num)
+{
+    return num >= 1 && num <= 10;
+}
+
+bool is_not_in_range_1_to_10(int num)
+{
+    return (!(num >= 1 && num <= 10)); //Saying not this ( )
+}
+
+bool is_not_in_range_1_to_10_OR(int num)
+{
+    return num < 1 || num > 10; //Saying not this ( )
+}
