@@ -4,6 +4,19 @@
 //Example: sum_of_squares(4) 
 //1*1 + 2 * 2 + 3*3 + 4*4 = 30
 
+int sum_of_squares(int num)
+{
+    auto sum = 0;
+    auto index = 1;
+
+    while(index <= num)
+    {
+        sum = sum + index * index;
+        index++; //instead of index + 1;
+    }
+
+    return sum;
+}
 
 //Using a while loop write code for display function that accepts a string and displays 
 //each character of the string in a line
