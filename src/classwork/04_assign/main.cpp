@@ -16,7 +16,7 @@ int main()
 
 	do
 	{
-		cout << "Enter a number between 1 and 10: ";
+		cout << "Enter number between 1 and 10: ";
 		cin >> number;
 
 		if (number >= 1 && number <= 10)
@@ -27,7 +27,7 @@ int main()
 
 		else
 
-			cout << "The number must be between 1 and 10.\n";
+			cout << "Number entered not in range.\n";
 
 		cout << "Would you like to enter another number? If yes, type Y. ";
 		cin >> retry;
