@@ -14,24 +14,29 @@ class TicTacToe{
     
     public:
 
-        bool game_over();
-        void start_game(string first_player);
-        void mark_board(int position);
-        string get_player()const{return player;}
-        string get_winner(){return winner;}
+    TicTacToe();
+    TicTacToe(int size): pegs(size * size, " "){};
+    bool game_over();
+    void start_game(string first_player);
+    void mark_board(int position);
+    string get_player() const{return player;}
+    string get_winner() {
+      return winner;
+    }
 
+protected:
+    vector<string> pegs;
+    virtual bool check_column_win();
+    virtual bool check_row_win();
+    virtual bool check_diagonal_win();
 
-    private:
-
-        vector<string> pegs{9, " "};
-        string player, winner;
-        void clear_board();
-        bool check_board_full();
-        void set_next_player();
-        bool check_column_win();
-        bool check_row_win();
-        bool check_diagonal_win();
-        void set_winner();
+  private:
+    string player;
+    string winner;
+    void clear_board();
+    bool check_board_full();
+    void set_next_player();
+    void set_winner();
 
 };
 

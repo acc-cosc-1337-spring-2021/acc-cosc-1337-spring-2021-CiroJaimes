@@ -1,59 +1,111 @@
+#include<memory>
+using std::unique_ptr; using std::make_unique;
+
+#include <string>
+using std::string;
+
 #include "tic_tac_toe.h"
 #include "tic_tac_toe_manager.h"
-#include <iomanip>
-#include <iostream>
-using std::cout; 
-using std::cin;
+#include "tic_tac_toe_3.h"
+#include "tic_tac_toe_4.h"
+using std::cout; using std::cin;
+string go_again;
 
 int main() 
 {
-	TicTacToeManager manager;
-	int o, x, t;
-	string choice, again = "y";
-	
-	while(again == "y" || again == "Y")
-	{
-		TicTacToe game;
-		cout<<"Would you like to play as X or as O?\n";
-		cin>>choice;
-		while(!(choice == "X" || choice == "x" || choice == "O" || choice == "o"))
-		{
-			cout<<"INVALID! Pick X or O.\n";
-			cin>>choice;
-		}
-		if(choice == "x")
-		{
-			choice = "X";
-		}
-		else if(choice == "o")
-		{
-			choice = "O";
-		}
-		game.start_game(choice);
+  
+  
+  TicTacToeManager manager;  
+  
+  int x;  
+  int o;
+  int t;
 
-		while(game.game_over() == false)
-		{
-			cin>>game;
-			cout<<game;
-			cout<<"\n";
-		}
-	manager.save_game(game);
-	manager.get_winner_totals(o,x,t);
-	if(game.get_winner() == "C")
-	{
-		cout<<"It's a tie!\n";
-	}
-	else
-		cout<<"Game over. "<<game.get_winner()<<" wins!.\n";
-	cout<<std::setfill('-')<<std::setw(30)<<"-\n";
-	cout<<"Winner totals\nX: "<<x<<"\nO: "<<o<<"\nTies: "<<t<<"\n";
-	cout<<"Would you like to play again? Y/N: \n";
-	cin>>again;
-	}
-	cout<<std::setfill('-')<<std::setw(30)<<"-\n";
-	cout<<"Games played this session: "<<(o+t+x)<<"\n";
-	cout<<"Winner totals this session:\nX: "<<x<<"\nO: "<<o<<"\nTies: "<<t<<"\n\n";
-	cout<<"--Game History--\n";
-	cout<<manager;
-	return 0;
+  do  
+  {
+  
+    unique_ptr<TicTacToe> game;
+
+    string game_type;
+    
+    
+
+    do
+    {
+      cout<<"Enter '3' for 3x3 board or '4' for 4x4 board: \n";
+      cin>>game_type;
+
+      if(game_type == "3")
+      {
+        game = make_unique<TicTacToe3>();
+      }
+      else if(game_type == "4")
+      {
+        game = make_unique<TicTacToe4>();
+      }
+    }
+    while(!(game_type == "3" || game_type == "4")); 
+
+
+
+    string first_player;
+
+    do
+    {
+      cout<<"Please enter first player. (Enter X or O): \n";
+      cin>> first_player;
+
+      if (first_player == "x")
+      {
+        first_player = "X";
+      }
+      else if (first_player == "o")
+      {
+        first_player = "O";
+      }
+    }
+    while(!(first_player == "X" || first_player == "O")); 
+    game->start_game(first_player);
+
+    cout<<*game; 
+
+    do
+    {
+      cin>>*game;
+
+      cout<<*game; 
+    }
+    while(!(game->game_over()));
+        
+  
+    cout<<"GAME OVER. The winner was: " << game->get_winner() << "\n";
+
+    manager.save_game(game); 
+    
+    manager.get_winner_total(o, x, t); 
+    cout<<"Games Winning Tally: \n";
+    cout<<"O wins: " << o << "\n";
+    cout<<"X wins: " << x << "\n";
+    cout<<"Ties: " << t << "\n";
+    
+    cout<<"Would you like to play again? Type 'Y' or 'y' to play again. \n";
+    cin>>go_again;
+
+    
+  }
+  while(go_again == "Y" || go_again == "y");
+	
+  cout<<"-------------------------------------------------------------------- \n";
+  cout<<"Displaying game boards history: \n";
+  cout<<manager; 
+
+  manager.get_winner_total(o, x, t);
+  cout<<"Final Games Winning Tally: \n";
+  cout<<"O wins: " << o << "\n";
+  cout<<"X wins: " << x << "\n";
+  cout<<"Ties: " << t << "\n\n";
+
+  cout<<"Thanks for playing.";
+    
+  return 0;
 }
