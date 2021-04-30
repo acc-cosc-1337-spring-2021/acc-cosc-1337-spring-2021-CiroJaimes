@@ -8,104 +8,71 @@ using std::string;
 #include "tic_tac_toe_manager.h"
 #include "tic_tac_toe_3.h"
 #include "tic_tac_toe_4.h"
+#include "tic_tac_toe_data.h"
 using std::cout; using std::cin;
 string go_again;
 
 int main() 
 {
+	string go_again;
+	int o_win = 0;
+	int x_win = 0;
+	int tie = 0;
+	TicTacToeData data;
+	TicTacToeManager manager(data);
+
+	do { 
+		unique_ptr<TicTacToe> game;
+		string game_size;
+
+		do {
+			cout<< "Play 3x3 or 4x4? (enter 3 or 4)\n";
+			cin>>game_size;
+
+			if(game_size == "3") {
+				game = make_unique<TicTacToe3>();
+
+			} else if (game_size == "4") {
+				game = make_unique<TicTacToe4>();
+			}
+		} while(!(game_size == "3" || game_size == "4"));
+
+		string player;
+
+		do{
+			cout<<"Who will play first? (X or O ): \n";
+			cin>>player;
+		} while (!(player == "X" || player == "O"));
+
+			game -> start_game(player);
+			cout << *game;
+
+			do {
+				cout << "Player "<< game->get_player() <<" select a spot\n";
+				cin >> *game;
+				cout<< *game;
+			}while(!(game->game_over()));
+
+			string winner = game ->get_winner();
+			string message = winner == "C" ? "It\'s a tie!!\n\n" : "Player " + winner + " wins!!! \n";
+			cout<<message;
+			manager.save_game(game);
+			manager.get_winner_total(o_win, x_win, tie);
+
+			cout<< "All wins: \n";
+			cout<< "Player X: "<<x_win<<"\n";
+			cout<< "Player O: "<<o_win<<"\n";
+			cout<< "Ties: "<<tie<<"\n";
+			cout<<"************************************** \n \n";
+			cout<<"Play again? (Y or N)\n";
+			cin>>go_again;
+
+
+	}while(go_again == "Y" || go_again == "y");
   
-  
-  TicTacToeManager manager;  
-  
-  int x;  
-  int o;
-  int t;
+	cout<<"------------------------------\n";
+	cout<< "Game History\n\n";
+	cout<<manager;
 
-  do  
-  {
-  
-    unique_ptr<TicTacToe> game;
-
-    string game_type;
-    
-    
-
-    do
-    {
-      cout<<"Enter '3' for 3x3 board or '4' for 4x4 board: \n";
-      cin>>game_type;
-
-      if(game_type == "3")
-      {
-        game = make_unique<TicTacToe3>();
-      }
-      else if(game_type == "4")
-      {
-        game = make_unique<TicTacToe4>();
-      }
-    }
-    while(!(game_type == "3" || game_type == "4")); 
-
-
-
-    string first_player;
-
-    do
-    {
-      cout<<"Please enter first player. (Enter X or O): \n";
-      cin>> first_player;
-
-      if (first_player == "x")
-      {
-        first_player = "X";
-      }
-      else if (first_player == "o")
-      {
-        first_player = "O";
-      }
-    }
-    while(!(first_player == "X" || first_player == "O")); 
-    game->start_game(first_player);
-
-    cout<<*game; 
-
-    do
-    {
-      cin>>*game;
-
-      cout<<*game; 
-    }
-    while(!(game->game_over()));
-        
-  
-    cout<<"GAME OVER. The winner was: " << game->get_winner() << "\n";
-
-    manager.save_game(game); 
-    
-    manager.get_winner_total(o, x, t); 
-    cout<<"Games Winning Tally: \n";
-    cout<<"O wins: " << o << "\n";
-    cout<<"X wins: " << x << "\n";
-    cout<<"Ties: " << t << "\n";
-    
-    cout<<"Would you like to play again? Type 'Y' or 'y' to play again. \n";
-    cin>>go_again;
-
-    
-  }
-  while(go_again == "Y" || go_again == "y");
-	
-  cout<<"-------------------------------------------------------------------- \n";
-  cout<<"Displaying game boards history: \n";
-  cout<<manager; 
-
-  manager.get_winner_total(o, x, t);
-  cout<<"Final Games Winning Tally: \n";
-  cout<<"O wins: " << o << "\n";
-  cout<<"X wins: " << x << "\n";
-  cout<<"Ties: " << t << "\n\n";
-
-  cout<<"Thanks for playing.";
-    
-  return 0;
+	return 0;
 }
